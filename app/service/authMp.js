@@ -3,11 +3,11 @@
 const { Service } = require('egg')
 
 class MpauthService extends Service {
-  async auth(page = 1) {
+  async auth(code) {
     // read config
+    console.log(code);
     const { AUTH_URL } = this.config.wechat
-    // use build-in http client to GET hacker-news api
-    const { status, data } = await this.ctx.curl(AUTH_URL('jskaogndoanb'), {
+    const { status, data } = await this.ctx.curl(AUTH_URL(code), {
       dataType: 'json',
     })
     console.log(status, data)

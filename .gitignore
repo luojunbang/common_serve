@@ -6,3 +6,4 @@ output
 logs
 run
 
+./app.config.js

@@ -14,5 +14,3 @@ module.exports = app => {
 //   console.log('tes:', res)
 //   // todo..
 // })
-
-const sql = require('../utils/sql')

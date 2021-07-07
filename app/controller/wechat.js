@@ -2,10 +2,10 @@
 const { Controller } = require('egg')
 
 class WechatController extends Controller {
-  async index() {
+  async index(data) {
     const { ctx } = this
-    // console.log(ctx.service.authMp.auth)
-    const newsList = await ctx.service.authMp.auth()
+    console.log('code',ctx.params);
+    // const newsList = await ctx.service.authMp.auth(code)
     ctx.body = 'Egg'
   }
 }

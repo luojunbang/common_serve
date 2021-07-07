@@ -11,8 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "egg": "^2.29.4",
+    "egg-mysql": "^3.0.0",
     "mysql": "^2.18.1",
     "node-xlsx": "^0.16.1",
+    "pify": "^5.0.0",
     "redis": "^3.1.2"
   },
   "devDependencies": {
