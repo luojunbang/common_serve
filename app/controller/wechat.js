@@ -1,28 +1,24 @@
-'use strict'
-const { Controller } = require('egg')
+"use strict";
+const { Controller } = require("egg");
 
 class WechatController extends Controller {
   async index(data) {
-    const { ctx } = this
+    const { ctx } = this;
     // const newsList = await ctx.service.authMp.auth(code)
-    ctx.body = {
-      status:200,
-      data:'luo'
-    }
   }
-  async auth(data) {
-    const { query,params,request,validate } = this.ctx
+  async auth() {
+    const { ctx, config } = this;
+    const { query, params, request, validate } = ctx;
     const rule = {
-      data:'string'
-    }
-    this.ctx.validate(rule,request.body)
-    console.log(request.body);
-    // const newsList = await ctx.service.authMp.auth(code)
-    this.ctx.body = {
-      status:200,
-      data:'luo'
-    }
+      code: "string",
+    };
+    ctx.validate(rule, request.body);
+    const { code } = request.body;
+    const resbody = await ctx.service.authMp.auth(code).catch((err) => {
+     
+    });
+    ctx.body = resbody || {}
   }
 }
 
-module.exports = WechatController
+module.exports = WechatController;
