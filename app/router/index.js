@@ -4,7 +4,11 @@
 module.exports = app => {
   const { router, controller } = app
   router.get('/', controller.system.index)
-  // router.get('/wx', controller.wechat.index)
+  router.post('/login', controller.system.login)
+  router.post('/logout', controller.system.logout)
+  router.post('/info', controller.system.info)
+  router.post('/wx/register', controller.wechat.register)
+  router.post('/wx/profile', controller.wechat.profile)
   router.post('/wx/auth', controller.wechat.auth)
 }
 

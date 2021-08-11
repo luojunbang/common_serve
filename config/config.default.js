@@ -16,7 +16,6 @@ try {
 const keys = "lo";
 const { APP_ID, APP_SECRET } = APP_CONFIG;
 
-console.log(APP_ID, APP_SECRET);
 const security = {
   csrf: false
 };
@@ -27,6 +26,7 @@ const status = {
 }
 
 const wechat = {
+  APP_ID,
   AUTH_URL: code =>
     `https://api.weixin.qq.com/sns/jscode2session?appid=${APP_ID}&secret=${APP_SECRET}&js_code=${code}&grant_type=authorization_code`,
 };
@@ -40,7 +40,11 @@ const pack= {
   },
 };
 
+const user_cache = {
+
+}
 module.exports={
+  user_cache,
   ...pack,
   wechat,
   security,

@@ -14,10 +14,20 @@ class WechatController extends Controller {
     };
     ctx.validate(rule, request.body);
     const { code } = request.body;
-    const resbody = await ctx.service.authMp.auth(code).catch((err) => {
-     
-    });
-    ctx.body = resbody || {}
+    const resbody = await ctx.service.authMp.auth(code)
+    ctx.body = resbody || config.rsp500()
+  }
+  async register(){
+    const {ctx,config} =this
+    const {  request } = ctx;
+    const resbody = await ctx.service.authMp.register(request.body)
+    ctx.body = resbody || config.rsp500() 
+  }
+  async profile(){
+    const {ctx,config} = this
+    const resbody = await ctx.service.authMp.profile(ctx.request.body)
+    ctx.body = resbody || config.rsp500() 
+
   }
 }
 
