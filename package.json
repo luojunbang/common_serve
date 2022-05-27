@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "egg": "^2.29.4",
+    "egg-cors": "^2.2.3",
     "egg-mysql": "^3.0.0",
     "egg-validate": "^2.0.2",
     "mysql": "^2.18.1",

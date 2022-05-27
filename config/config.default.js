@@ -2,12 +2,16 @@
 
 // const fs = require("fs/promises");
 // const { join } = require("path");
-let APP_CONFIG = {}
+let APP_CONFIG = {};
 try {
   // fs.statSync(join(__dirname, "../app.config.js"));
   APP_CONFIG = require("../app.config.js");
 } catch (e) {
-  console.log('........','ATTENTION!! CANT FIND FILE app.config.js FOR APP','........');
+  console.log(
+    "........",
+    "ATTENTION!! CANT FIND FILE app.config.js FOR APP",
+    "........"
+  );
   APP_CONFIG = {
     APP_ID: "APP_ID",
     APP_SECRET: "APP_SECRET",
@@ -17,44 +21,51 @@ const keys = "lo";
 const { APP_ID, APP_SECRET } = APP_CONFIG;
 
 const security = {
-  csrf: false
+  csrf: false,
 };
+
 const status = {
-  200:'ok',
-  400:'error',
-  405:'no auth'
-}
+  200: "ok",
+  400: "error",
+  405: "no auth",
+};
 
 const wechat = {
   APP_ID,
-  AUTH_URL: code =>
+  AUTH_URL: (code) =>
     `https://api.weixin.qq.com/sns/jscode2session?appid=${APP_ID}&secret=${APP_SECRET}&js_code=${code}&grant_type=authorization_code`,
 };
 
-const pack= {
-  rsp200(res={}, { status = 200, msg = "" } = {}) {
-    return { data:res, status, msg };
+const pack = {
+  rsp200(res = {}, { status = 200, msg = "" } = {}) {
+    return { data: res, status, msg };
   },
-  rsp500(res={}, { status = 500, msg = "Internal ERROR" } = {}) {
-    return { data:res, status, msg };
+  rsp500(res = {}, { status = 500, msg = "Internal ERROR" } = {}) {
+    return { data: res, status, msg };
   },
 };
 
-const user_cache = {
-
-}
-module.exports={
+const user_cache = {};
+module.exports = {
   user_cache,
   ...pack,
   wechat,
-  security,
+  security: {
+    csrf: {
+      enable: false,
+      ignoreJSON: true,
+    },
+    domainWhiteList: ["http://localhost:5500"],
+  },
+  cors: {
+    origin: "*",
+    allowMethods: "GET,HEAD,PUT,POST,DELETE,PATCH",
+  },
   keys,
   // 加载 errorHandler 中间件
-  middleware: [ 'errorHandler' ],
+  middleware: ["errorHandler"],
   // 只对 /api 前缀的 url 路径生效
   errorHandler: {
-    match: '',
+    match: "",
   },
-}
-
-
+};

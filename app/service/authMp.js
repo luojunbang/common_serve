@@ -53,30 +53,56 @@ class MpauthService extends Service {
     }
     return res;
   }
-  async profile(data) {
-    let res = null;
+  async login(params) {
+    const { encryptedData, iv, code } = params;
     const { config } = this;
-    const { user_cache } = config;
+    const { AUTH_URL } = config.wechat;
+    let res = null;
+    const loginBycodeRsp = await this.ctx
+      .curl(AUTH_URL(code), {
+        dataType: "json",
+      })
+      .catch((err) => {
+        resbody = this.config.rsp500(
+          {},
+          { msg: "ERR:GET WECHAT_CODE SERVER ERRR" }
+        );
+      });
+    if (!loginBycodeRsp) return resbody;
+    const { data, status } = loginBycodeRsp;
+    if (status !== 200) return resbody; // 请求不成功
+    console.log(config.user_cache);
+    if(config.user_cache.openid == data.openid) return config.rsp200(config.user_cache)
+    if (data.errcode === 0 || !data.errcode) {
+      config.user_cache.token = "TOKEN";
+      config.user_cache.session_key = data.session_key;
+      config.user_cache.userId = "root";
+      config.user_cache.openid = data.openid;
+      config.user_cache.userInfo = {};
+    }
     const APP_ID = config.wechat.APP_ID;
-    const authRes = await this.auth(data.code);
-    if (authRes.status !== 200) return authRes;
-    const { session_key } = user_cache;
-    const { encryptedData, iv, userInfo } = data.userInfo;
-    user_cache.userInfo = { ...user_cache.userInfo, ...userInfo };
-    // res = config.rsp200(config.user_cache); // 纯userInfo
-    console.log(encryptedData,iv,session_key);
     try {
-      const decryptData = new WXBizDataCrypt(APP_ID, session_key).decryptData(
-        encryptedData,
-        iv
-      );
-      console.log(decryptData);
-      user_cache.userInfo = { ...user_cache.userInfo, ...decryptData };
+      const decryptData = new WXBizDataCrypt(
+        APP_ID,
+        data.session_key
+      ).decryptData(encryptedData, iv);
+      config.user_cache.phoneNumber = decryptData.phoneNumber;
+      config.user_cache.purePhoneNumber = decryptData.purePhoneNumber;
+      config.user_cache.countryCode = decryptData.countryCode;
+      console.log(config.user_cache);
       res = config.rsp200(config.user_cache);
     } catch (e) {
       console.log(e);
       res = config.rsp500({}, { msg: "ERROR:DECRYPT FAIL" });
     }
+    return res
+  }
+  async profile(ID,userInfo) {
+    let res = null;
+    const { config } = this;
+    const { user_cache } = config;
+    user_cache.userInfo = { ...user_cache.userInfo, ...userInfo };
+    res = config.rsp200(config.user_cache);
     return res;
   }
 }
