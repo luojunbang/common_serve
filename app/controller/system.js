@@ -10,7 +10,7 @@ class SystemController extends Controller {
     const { ctx } = this;
     ctx.body = await new Promise((rs) => {
       setTimeout(() => {
-        rs({ riskLevel: 1, authFactor: "多人确认审核,双因子认证,af234" });
+        rs({ riskLevel: 1, authFactor: "双因子认证,多人确认审核,af234" });
       }, 1000);
     });
   }
