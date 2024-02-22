@@ -5,6 +5,7 @@ module.exports = app => {
   const { router, controller } = app
   router.get('/', controller.system.index)
   router.get('/role', controller.system.role)
+  router.get('/file', controller.file.file)
   router.post('/jude', controller.system.jude)
   router.get('/getukeylist', controller.ukey.getukeylist)
   router.post('/ukeyauthsign', controller.ukey.ukeyauthsign)

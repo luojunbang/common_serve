@@ -37,3 +37,5 @@ class WechatController extends Controller {
 }
 
 module.exports = WechatController;
+
+

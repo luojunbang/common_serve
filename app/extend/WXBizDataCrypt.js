@@ -1,4 +1,14 @@
 var crypto = require('crypto')
+var CryptoJS = require('crypto-js')
+
+const res = CryptoJS.AES.encrypt('Admin123', CryptoJS.enc.Utf8.parse('dsmpdsmpdsmpdsmp'), {
+  iv: CryptoJS.enc.Utf8.parse('1234567890123456'),
+  mode: CryptoJS.mode.CBC,
+  padding: CryptoJS.pad.Pkcs7,
+})
+console.log('crypto.AES.encryp:', res.ciphertext.toString(CryptoJS.enc.Base64))
+//
+console.log(CryptoJS.AES.decrypt('uWHn7YtqpfQ8P+pYn+tDsw==', CryptoJS.enc.Utf8.parse('dsmpdsmpdsmpdsmp'), { iv: CryptoJS.enc.Utf8.parse('1234567890123456'), mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString(CryptoJS.enc.Utf8))
 
 function WXBizDataCrypt(appId, sessionKey) {
   this.appId = appId
@@ -12,15 +22,14 @@ WXBizDataCrypt.prototype.decryptData = function (encryptedData, iv) {
   iv = new Buffer(iv, 'base64')
 
   try {
-     // 解密
+    // 解密
     var decipher = crypto.createDecipheriv('aes-128-cbc', sessionKey, iv)
     // 设置自动 padding 为 true，删除填充补位
     decipher.setAutoPadding(true)
     var decoded = decipher.update(encryptedData, 'binary', 'utf8')
     decoded += decipher.final('utf8')
-    
-    decoded = JSON.parse(decoded)
 
+    decoded = JSON.parse(decoded)
   } catch (err) {
     throw new Error('Illegal Buffer')
   }
@@ -32,4 +41,4 @@ WXBizDataCrypt.prototype.decryptData = function (encryptedData, iv) {
   return decoded
 }
 
-module.exports = WXBizDataCrypt
+// module.exports = WXBizDataCrypt
